@@ -202,7 +202,7 @@ export default function LoginPage() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="mohor-input"
-              placeholder="+8801XXXXXXXXX"
+              placeholder="01XXXXXXXXX"
               suppressHydrationWarning
             />
           </div>
