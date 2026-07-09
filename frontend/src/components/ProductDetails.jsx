@@ -13,8 +13,8 @@ export default function ProductDetails({ product }) {
     product.images?.[0]?.url || product.images?.[0] || null,
   );
 
-
   const [successToast, setSuccessToast] = useState(false);
+  const [errorToast, setErrorToast] = useState(null); // Changed to store error message
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState("cart"); 
   const [chosenQuantity, setChosenQuantity] = useState(1);
@@ -32,8 +32,8 @@ export default function ProductDetails({ product }) {
   
   const handleAddToCartClick = () => {
     if (!isAuthenticated) {
-      alert("Please log in to start saving premium catalog lines.");
-      router.push("/login");
+      setErrorToast("Please log in to start saving premium catalog lines.");
+      setTimeout(() => setErrorToast(null), 3000);
       return;
     }
     setChosenQuantity(1);
@@ -43,8 +43,8 @@ export default function ProductDetails({ product }) {
 
   const handleOrderClick = () => {
     if (!isAuthenticated) {
-      alert("Please log in to initiate order creation pipelines.");
-      router.push("/login");
+      setErrorToast("Please log in to initiate order creation pipelines.");
+      setTimeout(() => setErrorToast(null), 3000);
       return;
     }
     setChosenQuantity(1);
@@ -61,12 +61,12 @@ export default function ProductDetails({ product }) {
         setSuccessToast(true);
         setTimeout(() => setSuccessToast(false), 2000);
       } catch (err) {
-        alert(err.message || "Failed to sync cart item selection.");
+        setErrorToast(err.message || "Failed to sync cart item selection.");
+        setTimeout(() => setErrorToast(null), 3000);
       } finally {
         setIsSyncing(false);
       }
     } else {
-      
       setShowModal(false);
       router.push(`/checkout?product_id=${product.id}&qty=${chosenQuantity}`);
     }
@@ -105,6 +105,14 @@ export default function ProductDetails({ product }) {
           42%  { box-shadow: 0 0 12px 3px oklch(0.45 0.1 60 / 0.5); }
           70%  { box-shadow: 0 0 6px 1px oklch(0.45 0.1 60 / 0.25); }
           100% { box-shadow: 0 0 6px 1px oklch(0.45 0.1 60 / 0.3); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateY(-16px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         .product-btn {
           padding: 0.75rem 2rem;
@@ -550,7 +558,7 @@ export default function ProductDetails({ product }) {
         </div>
       )}
       
-      {/* Toast Notification block */}
+      {/* Success Toast Notification */}
       {successToast && (
         <div
           style={{
@@ -570,12 +578,6 @@ export default function ProductDetails({ product }) {
             animation: "fadeInUp 0.3s ease-out",
           }}
         >
-          <style>{`
-            @keyframes fadeInUp {
-              from { opacity: 0; transform: translateY(16px); }
-              to   { opacity: 1; transform: translateY(0); }
-            }
-          `}</style>
           <span style={{ fontSize: "1.25rem" }}>🛒</span>
           <div>
             <p style={{ fontWeight: 700, color: "var(--ink)", fontSize: "0.875rem" }}>
@@ -585,6 +587,56 @@ export default function ProductDetails({ product }) {
               {chosenQuantity} × {product.name}
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Error Toast Notification */}
+      {errorToast && (
+        <div
+          style={{
+            position: "fixed",
+            top: "2rem",
+            right: "2rem",
+            zIndex: 200,
+            background: "#fff5f5",
+            border: "1px solid #feb2b2",
+            borderRadius: "1rem",
+            padding: "1rem 1.5rem",
+            boxShadow: "0 8px 32px oklch(0.18 0.02 80 / 0.2)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            fontFamily: "var(--font-sans)",
+            animation: "fadeInDown 0.3s ease-out",
+            maxWidth: "400px",
+          }}
+        >
+          <span style={{ fontSize: "1.25rem" }}>⚠️</span>
+          <div>
+            <p style={{ fontWeight: 700, color: "#c53030", fontSize: "0.875rem" }}>
+              Error
+            </p>
+            <p style={{ fontSize: "0.8rem", color: "#742a2a", marginTop: "0.1rem" }}>
+              {errorToast}
+            </p>
+          </div>
+          <button
+            onClick={() => setErrorToast(null)}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "1.25rem",
+              cursor: "pointer",
+              color: "#c53030",
+              padding: "0 0 0 0.5rem",
+              opacity: 0.6,
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = 0.6)}
+          >
+            ✕
+          </button>
         </div>
       )}
     </section>
