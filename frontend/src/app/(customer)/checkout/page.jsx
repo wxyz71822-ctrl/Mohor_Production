@@ -151,7 +151,7 @@ function CheckoutContent() {
   const directProductId = searchParams.get("product_id");
   const directQty = parseInt(searchParams.get("qty") || "1", 10);
   const paymentNumber = "01330113027";
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef(null);
 
   const [directProduct, setDirectProduct] = useState(null);
   const [directLoading, setDirectLoading] = useState(false);
@@ -253,8 +253,8 @@ function CheckoutContent() {
       await processCheckout(payload);
       toast.success("🎉 Order successfully generated!");
       router.push("/");
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong.");
+    } catch (err) {
+  toast.error(err?.message || "Something went wrong.");
     }
   };
 
