@@ -32,23 +32,21 @@ export default function ProductDetails({ product }) {
   
   const handleAddToCartClick = () => {
     if (!isAuthenticated) {
-      toast.error("Please log in to add items to your cart.");
+      alert("Please log in to start saving premium catalog lines.");
       router.push("/login");
       return;
     }
-  
     setChosenQuantity(1);
     setModalMode("cart");
     setShowModal(true);
   };
-  
+
   const handleOrderClick = () => {
     if (!isAuthenticated) {
-      toast.error("Please log in to place an order.");
+      alert("Please log in to initiate order creation pipelines.");
       router.push("/login");
       return;
     }
-  
     setChosenQuantity(1);
     setModalMode("direct_order");
     setShowModal(true);
