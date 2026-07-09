@@ -72,3 +72,4 @@ To boot the Frontend Storefront:
 -cd frontend
 -npm install
 -npm run dev
+###Production Ready
