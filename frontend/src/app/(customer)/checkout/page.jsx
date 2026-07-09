@@ -4,11 +4,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useOrder } from "@/context/OrderContext";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import api from "@/services/api";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { user } = useAuth();
@@ -440,5 +440,19 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+                            
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[var(--cream)]">
+          Loading checkout...
+        </div>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
   );
 }
