@@ -32,10 +32,6 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      if (!formData.phone.startsWith("+880")) {
-        throw new Error("Use phone format +8801XXXXXXXXX");
-      }
-
       const registerResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         {
@@ -222,7 +218,7 @@ export default function SignupPage() {
               required
               value={formData.phone}
               onChange={handleChange}
-              placeholder="+8801XXXXXXXXX"
+              placeholder="01XXXXXXXXX"
               className="mohor-input"
               suppressHydrationWarning
             />
