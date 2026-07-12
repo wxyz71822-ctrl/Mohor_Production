@@ -135,7 +135,17 @@ export const getAllOrdersForAdminFromDb = async (searchProduct = '') => {
   }
 
   query += `
-    GROUP BY o.id
+    GROUP BY
+    o.id,
+    u.id,
+    u.name,
+    o.shipping_name,
+    o.shipping_phone,
+    o.shipping_address,
+    o.total_amount,
+    o.status,
+    o.created_at,
+    o.payment_reference
     ORDER BY o.created_at DESC
   `;
 
